@@ -1,0 +1,6 @@
+{
+  "name": "AURA Studio",
+  "description": "High-end interior design studio experience with 3D interactions and AI-powered mood interpretation.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

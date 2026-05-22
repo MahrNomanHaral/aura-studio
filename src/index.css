@@ -1,0 +1,61 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Inter:wght@100;200;300;400;500&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --color-aura-bg: #F5F0EA;
+  --color-aura-dark: #1C1C1E;
+  --color-aura-brass: #B8965A;
+  --color-aura-sage: #8A9B8E;
+  
+  --font-serif: "Cormorant Garamond", serif;
+  --font-sans: "Inter", sans-serif;
+}
+
+@layer base {
+  body {
+    @apply bg-aura-bg text-aura-dark font-sans antialiased overflow-x-hidden selection:bg-aura-brass selection:text-white;
+  }
+
+  h1, h2, h3, h4, .font-serif {
+    @apply tracking-tight;
+  }
+
+  .tracking-widest {
+    @apply tracking-[0.2em];
+  }
+
+  .tracking-editorial {
+    @apply tracking-[0.25em];
+  }
+}
+
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 4px;
+}
+::-webkit-scrollbar-track {
+  @apply bg-aura-bg;
+}
+::-webkit-scrollbar-thumb {
+  @apply bg-aura-brass/30 rounded-full;
+}
+
+.lenis.lenis-smooth {
+  height: auto;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-scrolling iframe {
+  pointer-events: none;
+}

@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Suspense, lazy } from "react";
+import { Suspense, lazy, useState } from "react";
 import { ErrorBoundary, FallbackProps } from "react-error-boundary";
 import SmoothScroll from "./components/SmoothScroll";
 import LoadingScreen from "./components/LoadingScreen";
@@ -41,19 +41,23 @@ const Enquiry = lazy(() => import("./components/Enquiry"));
 const Footer = lazy(() => import("./components/Footer"));
 
 export default function App() {
+  const [contentReady, setContentReady] = useState(false);
+
   return (
     <ErrorBoundary FallbackComponent={ErrorFallback}>
       <SmoothScroll>
-        <LoadingScreen />
-        <CustomCursor />
+        <LoadingScreen onFinished={() => setContentReady(true)} />
+        {contentReady && <CustomCursor />}
         
         <main className="relative">
+          {contentReady ? (
+            <>
           <Suspense fallback={<div className="h-screen bg-aura-bg" />}>
             <ThreeHero />
           </Suspense>
 
           <Suspense fallback={null}>
-            <Philosophy />
+            <Philosophy scrollEnabled={contentReady} />
           </Suspense>
 
           <Suspense fallback={null}>
@@ -75,6 +79,10 @@ export default function App() {
           <Suspense fallback={null}>
             <Footer />
           </Suspense>
+            </>
+          ) : (
+            <div className="h-screen bg-aura-bg" aria-hidden />
+          )}
         </main>
       </SmoothScroll>
     </ErrorBoundary>

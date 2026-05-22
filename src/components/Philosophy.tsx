@@ -23,33 +23,46 @@ const principles = [
   },
 ];
 
-export default function Philosophy() {
+export default function Philosophy({ scrollEnabled = true }: { scrollEnabled?: boolean }) {
   const sectionRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    if (!scrollEnabled) return;
+
     const section = sectionRef.current;
     const container = containerRef.current;
     if (!section || !container) return;
 
     const scrollWidth = container.scrollWidth - window.innerWidth;
+    if (scrollWidth <= 0) return;
 
-    let ctx = gsap.context(() => {
-      gsap.to(container, {
-        x: -scrollWidth,
-        ease: "none",
-        scrollTrigger: {
-          trigger: section,
-          pin: true,
-          scrub: 1,
-          end: () => `+=${scrollWidth}`,
-          invalidateOnRefresh: true,
-        },
-      });
-    }, section);
+    let ctx: gsap.Context | undefined;
 
-    return () => ctx.revert();
-  }, []);
+    const init = () => {
+      ctx = gsap.context(() => {
+        gsap.to(container, {
+          x: -scrollWidth,
+          ease: "none",
+          scrollTrigger: {
+            trigger: section,
+            pin: true,
+            pinReparent: false,
+            scrub: 1,
+            end: () => `+=${scrollWidth}`,
+            invalidateOnRefresh: true,
+          },
+        });
+      }, section);
+    };
+
+    const frame = requestAnimationFrame(init);
+
+    return () => {
+      cancelAnimationFrame(frame);
+      ctx?.revert();
+    };
+  }, [scrollEnabled]);
 
   return (
     <section ref={sectionRef} className="h-screen overflow-hidden bg-aura-dark">

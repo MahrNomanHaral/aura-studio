@@ -1,7 +1,7 @@
 import { motion, AnimatePresence } from "motion/react";
 import { useEffect, useState } from "react";
 
-export default function LoadingScreen() {
+export default function LoadingScreen({ onFinished }: { onFinished?: () => void }) {
   const [isVisible, setIsVisible] = useState(true);
 
   useEffect(() => {
@@ -9,8 +9,14 @@ export default function LoadingScreen() {
     return () => clearTimeout(timer);
   }, []);
 
+  useEffect(() => {
+    if (isVisible) return;
+    const timer = setTimeout(() => onFinished?.(), 1000);
+    return () => clearTimeout(timer);
+  }, [isVisible, onFinished]);
+
   return (
-    <AnimatePresence>
+    <AnimatePresence initial={false}>
       {isVisible && (
         <motion.div
           exit={{ opacity: 0, transition: { duration: 1 } }}

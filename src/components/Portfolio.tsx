@@ -2,6 +2,10 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { cn } from "@/src/lib/utils";
 import { X } from "lucide-react";
+import copenhagenImg from "../assets/images/copenhagen_residency_1779430977670.png";
+import silenceImg from "../assets/images/house_for_silence_1779431000942.png";
+import dubaiImg from "../assets/images/dusk_dubai_1779431027364.png";
+import linenImg from "../assets/images/marble_linen_texture_1779431054946.png";
 
 const projects = [
   {
@@ -9,7 +13,7 @@ const projects = [
     title: "The Copenhagen Residency",
     location: "Denmark",
     scope: "Architecture + Interior",
-    image: "/src/assets/images/copenhagen_residency_1779430977670.png",
+    image: copenhagenImg,
     description: "A dialogue between Nordic clarity and tactile warmth. We stripped the space back to its core architectural intentions, allowing sunlight to become the primary tenant."
   },
   {
@@ -17,7 +21,7 @@ const projects = [
     title: "A House for Silence",
     location: "Kyoto",
     scope: "Minimalist Retreat",
-    image: "/src/assets/images/house_for_silence_1779431000942.png",
+    image: silenceImg,
     description: "Built on the principles of Ma—the space between. This residence prioritizes the ritual of quietude, with concrete volumes framing the shifting shadows of an ancient courtyard."
   },
   {
@@ -25,7 +29,7 @@ const projects = [
     title: "Dusk, Dubai",
     location: "UAE",
     scope: "Penthouse",
-    image: "/src/assets/images/dusk_dubai_1779431027364.png",
+    image: dubaiImg,
     description: "Elevation meets horizon. A project designed to catch the desert's shifting light, utilizing massive travertine slabs and raw silk to ground the verticality of the Burj Khalifa views."
   },
   {
@@ -41,7 +45,7 @@ const projects = [
     title: "Linen Loft",
     location: "NYC",
     scope: "Residential",
-    image: "/src/assets/images/marble_linen_texture_1779431054946.png",
+    image: linenImg,
     description: "Texture as structure. We replaced hard boundaries with soft transitions, using oversized linen drapes and lime-wash walls to create a breathable urban sanctuary."
   },
   {
@@ -103,9 +107,10 @@ export default function Portfolio() {
         </div>
       </div>
 
-      <AnimatePresence>
+      <AnimatePresence initial={false}>
         {selectedProject && (
           <motion.div
+            key={selectedProject.id}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -120,7 +125,6 @@ export default function Portfolio() {
 
             <div className="w-full max-w-6xl flex flex-col md:flex-row gap-12 items-center">
               <motion.div 
-                layoutId={`image-${selectedProject.id}`}
                 className="w-full md:w-1/2 aspect-[3/4] overflow-hidden"
               >
                 <img 

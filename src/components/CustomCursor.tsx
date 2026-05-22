@@ -9,7 +9,7 @@ export default function CustomCursor() {
   const sx = useSpring(cursorX, springConfig);
   const sy = useSpring(cursorY, springConfig);
   
-  const [variant, setVariant] = useState("default");
+  const [variant, setVariant] = useState<"default" | "hover" | "three">("default");
 
   useEffect(() => {
     const moveCursor = (e: MouseEvent) => {
@@ -37,42 +37,36 @@ export default function CustomCursor() {
     };
   }, []);
 
+  const cursorContent = {
+    default: (
+      <div className="w-5 h-5 rounded-full border border-white" />
+    ),
+    hover: (
+      <div className="w-2 h-2 rounded-full bg-white" />
+    ),
+    three: (
+      <div className="relative w-8 h-8 flex items-center justify-center">
+        <div className="absolute w-full h-[1px] bg-white opacity-40" />
+        <div className="absolute h-full w-[1px] bg-white opacity-40" />
+      </div>
+    ),
+  } as const;
+
   return (
     <motion.div
       className="fixed top-0 left-0 pointer-events-none z-[9999] flex items-center justify-center mix-blend-difference"
       style={{ x: sx, y: sy, translateX: "-50%", translateY: "-50%" }}
     >
-      <AnimatePresence mode="wait">
-        {variant === "default" && (
-          <motion.div
-            key="default"
-            className="w-5 h-5 rounded-full border border-white"
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            exit={{ scale: 0 }}
-          />
-        )}
-        {variant === "hover" && (
-          <motion.div
-            key="hover"
-            className="w-2 h-2 rounded-full bg-white"
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            exit={{ scale: 0 }}
-          />
-        )}
-        {variant === "three" && (
-          <motion.div
-            key="three"
-            className="relative w-8 h-8 flex items-center justify-center"
-            initial={{ scale: 0, rotate: 45 }}
-            animate={{ scale: 1, rotate: 0 }}
-            exit={{ scale: 0, rotate: -45 }}
-          >
-            <div className="absolute w-full h-[1px] bg-white opacity-40" />
-            <div className="absolute h-full w-[1px] bg-white opacity-40" />
-          </motion.div>
-        )}
+      <AnimatePresence mode="wait" initial={false}>
+        <motion.div
+          key={variant}
+          initial={{ scale: 0, rotate: variant === "three" ? 45 : 0 }}
+          animate={{ scale: 1, rotate: 0 }}
+          exit={{ scale: 0, rotate: variant === "three" ? -45 : 0 }}
+          transition={{ duration: 0.2 }}
+        >
+          {cursorContent[variant]}
+        </motion.div>
       </AnimatePresence>
     </motion.div>
   );
